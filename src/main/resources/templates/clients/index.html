@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clients Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <style>
+        .status-admin {
+            text-transform: uppercase;
+            color: red;
+        }
+        .status-student {
+            text-transform: lowercase;
+        }
+        .status-mentor {
+
+        }
+        .status-core-mentor {
+
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%; /* Круглая форма */
+            margin-right: 5px; /* Отступ справа от индикатора */
+        }
+        .status-admin-indicator {
+            background-color: red;
+        }
+        .status-student-indicator {
+            background-color: green;
+        }
+        .status-mentor-indicator {
+            background-color: orange;
+        }
+        .status-core-mentor-indicator {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-3">
+    <h1 class="text-center mb-3"> List of Clients</h1>
+    <a class="btn btn-primary" href="/clients/create">New Client</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Create</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <tr th:each="client : ${clients}">
+            <td th:text="${client.id}"></td>
+            <td th:text="@{${client.firstName} + ' ' + ${client.lastName}}"></td>
+            <td th:text="${client.email}"></td>
+            <td th:text="${client.phone}"></td>
+            <td th:text="${client.address}"></td>
+
+            <!-- Индикатор статуса -->
+            <td>
+                <span th:class="${client.status == 'Admin' ? 'status-indicator status-admin-indicator' : (client.status == 'Mentor' ? 'status-indicator status-mentor-indicator' : (client.status == 'CoreMentor' ? 'status-indicator status-core-mentor-indicator' : (client.status == 'Student' ? 'status-indicator status-student-indicator' : '')))}"></span>
+                <span th:class="${client.status == 'Admin' ? 'status-admin' : (client.status == 'Mentor' ? 'status-mentor' : (client.status == 'CoreMentor' ? 'status-core-mentor' : (client.status == 'Student' ? 'status-student' : '')))}" th:text="${client.status}"></span>
+            </td>
+            </td>
+
+            <td th:text="${client.createdAt.toString().substring(0, 10)}"></td>  <!-- там еще время так-то -->
+
+            <td style="white-space: nowrap">
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/clients/edit(id=${client.id})}">
+                    Edit
+                </a>
+                <a class="btn btn-danger btn-sm"
+                   th:href="@{/clients/delete(id=${client.id})}"
+                   onclick="return confirm('Are you sure')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>
